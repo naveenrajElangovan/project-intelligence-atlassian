@@ -1,0 +1,8 @@
+{
+  "name": "project-intelligence-atlassian-forge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {"@forge/api": "^6.0.0"},
+  "devDependencies": {"@forge/cli": "^13.5.0"}
+}

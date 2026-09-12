@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-intelligence-atlassian"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi==0.115.12",
+  "httpx==0.28.1",
+  "prometheus-client==0.22.1",
+  "pydantic-settings==2.8.1",
+  "uvicorn==0.34.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.5", "pytest-asyncio==0.25.3"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
