@@ -4,6 +4,9 @@ Read-only Atlassian integration boundary for Project Intelligence. It centralize
 Rovo MCP access, accepts signed Jira and Confluence Forge events, and dispatches
 identifier-only targeted jobs to ingestion.
 
+See [Current architecture](docs/ARCHITECTURE.md) for the complete component map,
+identity model, event and read flows, recovery behavior, and activation status.
+
 ## Security boundary
 
 The initial release is intentionally read-only. `READ_WRITE` or
