@@ -177,8 +177,7 @@ class EventCoordinator:
                 and event.resource_type.value in {"ISSUE", "PAGE", "LIVE_DOCUMENT", "BLOGPOST"}
             ),
             "childDeleted": (
-                "deleted" in event.event_type.lower()
-                and event.parent_resource_id is not None
+                "deleted" in event.event_type.lower() and event.parent_resource_id is not None
             ),
         }
         try:
@@ -212,8 +211,7 @@ class EventCoordinator:
                 continue
             key = "projectKey" if provider == "JIRA" else "spaceId"
             if any(
-                isinstance(item, dict)
-                and str(item.get(key) or "") == event.project_or_space_id
+                isinstance(item, dict) and str(item.get(key) or "") == event.project_or_space_id
                 for item in mappings
             ):
                 matches.append(project_id)
@@ -225,12 +223,17 @@ class EventCoordinator:
             if len(unique) == 1:
                 matches.extend(unique)
         if event.application_project_id:
-            return (event.application_project_id,) if event.application_project_id in matches else ()
+            return (
+                (event.application_project_id,) if event.application_project_id in matches else ()
+            )
         return tuple(dict.fromkeys(matches))
 
     async def _projects(self) -> tuple[dict[str, Any], ...]:
         now = time.monotonic()
-        if self._project_catalog and now - self._project_catalog_loaded_at < self.settings.project_catalog_ttl_seconds:
+        if (
+            self._project_catalog
+            and now - self._project_catalog_loaded_at < self.settings.project_catalog_ttl_seconds
+        ):
             return self._project_catalog
         headers = {"Accept": "application/json"}
         if self.settings.backend_internal_api_key:

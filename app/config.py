@@ -30,15 +30,17 @@ class Settings(BaseSettings):
     recovery_scan_seconds: int = Field(default=300, ge=60, le=86_400)
     catch_up_timeout_seconds: int = Field(default=1800, ge=60, le=7200)
 
-    model_config = SettingsConfigDict(
-        env_prefix="PI_ATLASSIAN_", env_file=".env", extra="ignore"
-    )
+    model_config = SettingsConfigDict(env_prefix="PI_ATLASSIAN_", env_file=".env", extra="ignore")
 
     @model_validator(mode="after")
     def enforce_initial_read_only_release(self):
         if self.access_mode != "READ_ONLY" or self.write_enabled:
             raise ValueError("The initial Atlassian service release is read-only.")
-        if self.rovo_service_token and self.rovo_service_auth_mode == "BASIC" and not self.rovo_service_username:
+        if (
+            self.rovo_service_token
+            and self.rovo_service_auth_mode == "BASIC"
+            and not self.rovo_service_username
+        ):
             raise ValueError("A Rovo username is required for BASIC service authentication.")
         return self
 

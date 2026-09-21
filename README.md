@@ -6,6 +6,8 @@ identifier-only targeted jobs to ingestion.
 
 See [Current architecture](docs/ARCHITECTURE.md) for the complete component map,
 identity model, event and read flows, recovery behavior, and activation status.
+See [Current quality status](docs/QUALITY_STATUS.md) for verified tests and the
+closed repository-hygiene decisions.
 
 ## Security boundary
 

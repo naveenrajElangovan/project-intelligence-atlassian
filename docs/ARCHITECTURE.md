@@ -1,6 +1,10 @@
 # Project Intelligence Atlassian — Current Architecture
 
-Last verified against the repository code and active development topology: 2026-09-12.
+The application suite has one active vector-record schema: version `3`. This provider boundary
+does not select or write schema versions; it supplies authorized source material to ingestion,
+which writes the single active contract.
+
+Last verified against the repository code and active development topology: 2026-09-15.
 
 ## 1. Purpose and boundary
 

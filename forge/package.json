@@ -3,6 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "dependencies": {"@forge/api": "^6.0.0"},
-  "devDependencies": {"@forge/cli": "^13.5.0"}
+  "scripts": {
+    "check": "npm run lint && npm run format:check && npm run dependencies",
+    "dependencies": "depcheck --ignores='@forge/cli'",
+    "format": "prettier --write src package.json eslint.config.js .prettierrc.json",
+    "format:check": "prettier --check src package.json eslint.config.js .prettierrc.json",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@forge/api": "6.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@forge/cli": "13.5.0",
+    "depcheck": "1.4.7",
+    "eslint": "10.10.0",
+    "prettier": "3.9.7"
+  }
 }
