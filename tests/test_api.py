@@ -13,7 +13,12 @@ from app.main import create_app
 
 
 def settings():
-    return Settings(_env_file=None, internal_api_key="internal-secret", forge_webhook_secret="forge-secret", ingestion_internal_api_key="ingestion-secret")
+    return Settings(
+        _env_file=None,
+        internal_api_key="internal-secret",
+        forge_webhook_secret="forge-secret",
+        ingestion_internal_api_key="ingestion-secret",
+    )
 
 
 def test_capabilities_are_read_only():
@@ -33,7 +38,11 @@ def test_metrics_are_exposed_without_content_payloads():
 
 def test_mutation_is_always_rejected():
     with TestClient(create_app(settings())) as client:
-        response = client.post("/v1/internal/mutations", headers={"X-Internal-Api-Key": "internal-secret"}, json={"operation": "createIssue", "arguments": {}})
+        response = client.post(
+            "/v1/internal/mutations",
+            headers={"X-Internal-Api-Key": "internal-secret"},
+            json={"operation": "createIssue", "arguments": {}},
+        )
     assert response.status_code == 403
     assert response.json()["detail"]["code"] == "ATLASSIAN_WRITE_DISABLED"
 
@@ -41,8 +50,15 @@ def test_mutation_is_always_rejected():
 def test_signed_event_is_accepted_once():
     payload = b'{"eventId":"event-1","eventType":"avi:jira:updated:issue","eventCreatedAt":"2026-09-11T12:00:00Z","cloudId":"cloud","resourceType":"ISSUE","resourceId":"1001","parentResourceId":null,"projectOrSpaceId":"T0","applicationProjectId":"T2.0","selfGenerated":false}'
     timestamp = str(int(time.time()))
-    signature = "sha256=" + hmac.new(b"forge-secret", timestamp.encode() + b"." + payload, hashlib.sha256).hexdigest()
-    headers = {"content-type": "application/json", "X-Atlassian-Timestamp": timestamp, "X-Atlassian-Signature-256": signature}
+    signature = (
+        "sha256="
+        + hmac.new(b"forge-secret", timestamp.encode() + b"." + payload, hashlib.sha256).hexdigest()
+    )
+    headers = {
+        "content-type": "application/json",
+        "X-Atlassian-Timestamp": timestamp,
+        "X-Atlassian-Signature-256": signature,
+    }
     with TestClient(create_app(settings())) as client:
         first = client.post("/v1/events/atlassian", headers=headers, content=payload)
         second = client.post("/v1/events/atlassian", headers=headers, content=payload)
@@ -119,9 +135,7 @@ def test_freshness_reports_provider_scopes_independently():
         "lastCompletedAt": 1.0,
         "lastFailure": None,
     }
-    app.state.coordinator.freshness_by_scope["P1:CONFLUENCE"] = {
-        "state": "IN_PROGRESS"
-    }
+    app.state.coordinator.freshness_by_scope["P1:CONFLUENCE"] = {"state": "IN_PROGRESS"}
     with TestClient(app) as client:
         response = client.get("/v1/freshness")
 

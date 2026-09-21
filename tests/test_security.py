@@ -8,7 +8,17 @@ from fastapi import HTTPException
 from app.security import ReadOnlyToolPolicy, verify_forge_signature
 
 
-@pytest.mark.parametrize("tool", ["search", "searchJiraIssuesUsingJql", "getConfluenceComment", "listJiraIssueComments", "executeRead", "discover"])
+@pytest.mark.parametrize(
+    "tool",
+    [
+        "search",
+        "searchJiraIssuesUsingJql",
+        "getConfluenceComment",
+        "listJiraIssueComments",
+        "executeRead",
+        "discover",
+    ],
+)
 def test_read_tools_allowed(tool):
     ReadOnlyToolPolicy().authorize(tool)
 
@@ -36,7 +46,10 @@ def test_write_and_unknown_tools_blocked(tool):
 def test_signature_validation():
     body = b'{"eventId":"one"}'
     timestamp = str(int(time.time()))
-    signature = "sha256=" + hmac.new(b"secret", timestamp.encode() + b"." + body, hashlib.sha256).hexdigest()
+    signature = (
+        "sha256="
+        + hmac.new(b"secret", timestamp.encode() + b"." + body, hashlib.sha256).hexdigest()
+    )
     verify_forge_signature(body, signature, timestamp, "secret", 300)
 
 
