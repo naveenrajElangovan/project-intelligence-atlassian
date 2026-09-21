@@ -158,7 +158,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if body.identity_class == "USER":
             if not body.user_id:
                 raise HTTPException(
-                    status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    status.HTTP_422_UNPROCESSABLE_ENTITY,
                     "A user identity is required for a user-scoped MCP read.",
                 )
             session = user_sessions.get((body.user_id, body.project_id))
@@ -172,7 +172,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         else:
             if body.user_id:
                 raise HTTPException(
-                    status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    status.HTTP_422_UNPROCESSABLE_ENTITY,
                     "A service-identity read cannot impersonate a user.",
                 )
             if configured.rovo_service_auth_mode == "BASIC" and configured.rovo_service_token:
